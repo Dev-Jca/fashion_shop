@@ -19,8 +19,8 @@ class _ProductsState extends State<Products> {
     {
       'name': 'Skirts',
       'picture': 'assets/images/products/skt1.jpeg',
-      'oldPrice': 120,
-      'price': 95,
+      'oldPrice': 80,
+      'price': 55,
     },
     {
       'name': 'Red dress',
@@ -31,50 +31,50 @@ class _ProductsState extends State<Products> {
     {
       'name': 'Pants',
       'picture': 'assets/images/products/pants1.jpg',
-      'oldPrice': 120,
-      'price': 95,
+      'oldPrice': 105,
+      'price': 65,
     },
     {
       'name': 'Casuals',
       'picture': 'assets/images/products/pants2.jpeg',
-      'oldPrice': 120,
-      'price': 95,
+      'oldPrice': 79,
+      'price': 69,
     },
     {
       'name': 'Blazer',
       'picture': 'assets/images/products/blazer2.jpeg',
-      'oldPrice': 120,
-      'price': 95,
+      'oldPrice': 110,
+      'price': 85,
     },
     {
       'name': 'Black dress',
       'picture': 'assets/images/products/dress2.jpeg',
-      'oldPrice': 120,
-      'price': 95,
+      'oldPrice': 110,
+      'price': 87,
     },
     {
       'name': 'Hills',
       'picture': 'assets/images/products/hills1.jpeg',
-      'oldPrice': 120,
-      'price': 95,
+      'oldPrice': 150,
+      'price': 105,
     },
     {
       'name': 'Hills',
       'picture': 'assets/images/products/hills2.jpeg',
-      'oldPrice': 120,
-      'price': 95,
+      'oldPrice': 99,
+      'price': 75,
     },
     {
       'name': 'Shoes',
       'picture': 'assets/images/products/shoe1.jpg',
       'oldPrice': 120,
-      'price': 95,
+      'price': 89,
     },
     {
       'name': 'Skirts',
       'picture': 'assets/images/products/skt2.jpeg',
-      'oldPrice': 120,
-      'price': 95,
+      'oldPrice': 109,
+      'price': 99,
     },
   ];
   @override
@@ -135,28 +135,36 @@ class SingleProduct extends StatelessWidget {
             child: GridTile(
               footer: Container(
                 color: Colors.white70,
-                child: ListTile(
-                  leading: Text(
-                    productName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        productName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                  title: Text(
-                    '\$$productPrice',
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.w800,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      child: Text(
+                        '\$$productOldPrice',
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                  subtitle: Text(
-                    '\$$productOldPrice',
-                    style: const TextStyle(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w800,
-                      decoration: TextDecoration.lineThrough,
+                    Text(
+                      '\$$productPrice',
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               child: Image.asset(

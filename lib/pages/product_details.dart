@@ -1,3 +1,4 @@
+import 'package:fashion_shop/components/product.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -31,25 +32,26 @@ class _ProductDetailsState extends State<ProductDetails> {
         backgroundColor: Colors.lightGreen,
         leading: IconButton(
             onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+            )),
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(85, 0, 0, 0),
+          child: InkWell(
+            onTap: () {
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/homePage/', (route) => false);
             },
-            icon: const Icon(
-              Icons.arrow_back_ios,
-            )),
-        title: const Text('Product Details'),
+            child: const Text('Grande'),
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () {},
             icon: const Icon(
               Icons.search,
-              color: Colors.white,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.shopping_cart,
               color: Colors.white,
             ),
           ),
@@ -107,7 +109,32 @@ class _ProductDetailsState extends State<ProductDetails> {
 //       ============= the size button ===================
               Expanded(
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text(
+                            'Size',
+                          ),
+                          content: const Text(
+                            'Choose the size',
+                          ),
+                          actions: [
+                            MaterialButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                'close',
+                                style: (TextStyle(color: Colors.lightGreen)),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
                   color: Colors.white,
                   textColor: Colors.grey,
                   elevation: 0.2,
@@ -128,7 +155,32 @@ class _ProductDetailsState extends State<ProductDetails> {
               //       ============= the color button ===================
               Expanded(
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text(
+                            'Color',
+                          ),
+                          content: const Text(
+                            'Choose a color',
+                          ),
+                          actions: [
+                            MaterialButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                'close',
+                                style: (TextStyle(color: Colors.lightGreen)),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
                   color: Colors.white,
                   textColor: Colors.grey,
                   elevation: 0.2,
@@ -150,7 +202,32 @@ class _ProductDetailsState extends State<ProductDetails> {
               //       ============= the qty button ===================
               Expanded(
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text(
+                            'Quantity',
+                          ),
+                          content: const Text(
+                            'Choose the quantity',
+                          ),
+                          actions: [
+                            MaterialButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                'close',
+                                style: (TextStyle(color: Colors.lightGreen)),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
                   color: Colors.white,
                   textColor: Colors.grey,
                   elevation: 0.2,
@@ -174,7 +251,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           //       =============== the second buttons ==================
           Row(
             children: [
-//       ============= the size button ===================
+//       ============= the buy now button ===================
               Expanded(
                 child: MaterialButton(
                   onPressed: () {},
@@ -200,8 +277,218 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
               ),
             ],
+          ),
+          const Divider(),
+
+          const ListTile(
+            title: Text('Product Details'),
+            subtitle: Text(
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            ),
+          ),
+
+          const Divider(),
+
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(12, 5, 5, 5),
+                child: Text(
+                  'Product name:',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: Text(widget.productDetailsName),
+              )
+            ],
+          ),
+
+          Row(
+            children: const [
+              Padding(
+                padding: EdgeInsets.fromLTRB(12, 5, 5, 5),
+                child: Text(
+                  'Product brand:',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: Text('Brand X'),
+              ),
+            ],
+          ),
+
+          Row(
+            children: const [
+              Padding(
+                padding: EdgeInsets.fromLTRB(12, 5, 5, 5),
+                child: Text(
+                  'Product condition:',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: Text('NEW'),
+              )
+            ],
+          ),
+          //     =====================SIMILAR PRODUCTS==========================
+          const Divider(),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Similar products'),
+          ),
+          Container(
+            height: 300,
+            child: const SimilarProducts(),
           )
         ],
+      ),
+    );
+  }
+}
+
+class SimilarProducts extends StatefulWidget {
+  const SimilarProducts({Key? key}) : super(key: key);
+
+  @override
+  State<SimilarProducts> createState() => _SimilarProductsState();
+}
+
+class _SimilarProductsState extends State<SimilarProducts> {
+  var productList = [
+    {
+      'name': 'Black dress',
+      'picture': 'assets/images/products/dress2.jpeg',
+      'oldPrice': 110,
+      'price': 87,
+    },
+    {
+      'name': 'Hills',
+      'picture': 'assets/images/products/hills1.jpeg',
+      'oldPrice': 150,
+      'price': 105,
+    },
+    {
+      'name': 'Shoes',
+      'picture': 'assets/images/products/shoe1.jpg',
+      'oldPrice': 120,
+      'price': 89,
+    },
+    {
+      'name': 'Skirts',
+      'picture': 'assets/images/products/skt2.jpeg',
+      'oldPrice': 109,
+      'price': 99,
+    },
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      itemCount: productList.length,
+      gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      itemBuilder: (BuildContext context, int index) {
+        return SimilarSingleProduct(
+          productName: productList[index]['name'],
+          productPicture: productList[index]['picture'],
+          productOldPrice: productList[index]['oldPrice'],
+          productPrice: productList[index]['price'],
+        );
+      },
+    );
+  }
+}
+
+class SimilarSingleProduct extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
+  final productName;
+  // ignore: prefer_typing_uninitialized_variables
+  final productPicture;
+  // ignore: prefer_typing_uninitialized_variables
+  final productOldPrice;
+  // ignore: prefer_typing_uninitialized_variables
+  final productPrice;
+
+  const SimilarSingleProduct({
+    super.key,
+    required this.productName,
+    required this.productPicture,
+    required this.productOldPrice,
+    required this.productPrice,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Hero(
+        tag: productName,
+        child: Material(
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ProductDetails(
+                    productDetailsName: productName,
+                    productDetailsPrice: productPrice,
+                    productDetailsOldPrice: productOldPrice,
+                    productDetailsPicture: productPicture,
+                  ),
+                ),
+              );
+            },
+            child: GridTile(
+              footer: Container(
+                color: Colors.white70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        productName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      child: Text(
+                        '\$$productOldPrice',
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      '\$$productPrice',
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              child: Image.asset(
+                productPicture,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

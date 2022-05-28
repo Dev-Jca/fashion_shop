@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> {
         animationDuration: const Duration(milliseconds: 1000),
         dotSize: 4.0,
         indicatorBgPadding: 2.0,
+        dotBgColor: Colors.transparent,
       ),
     );
     return Scaffold(
@@ -93,6 +94,7 @@ class _HomePageState extends State<HomePage> {
                 title: Text('Home Page'),
                 leading: Icon(
                   Icons.home,
+                  color: Colors.lightGreen,
                 ),
               ),
             ),
@@ -103,6 +105,7 @@ class _HomePageState extends State<HomePage> {
                 title: Text('My Account'),
                 leading: Icon(
                   Icons.person,
+                  color: Colors.lightGreen,
                 ),
               ),
             ),
@@ -113,6 +116,7 @@ class _HomePageState extends State<HomePage> {
                 title: Text('My Orders'),
                 leading: Icon(
                   Icons.shopping_basket,
+                  color: Colors.lightGreen,
                 ),
               ),
             ),
@@ -120,9 +124,10 @@ class _HomePageState extends State<HomePage> {
             InkWell(
               onTap: () {},
               child: const ListTile(
-                title: Text('Categories'),
+                title: Text('Shopping Cart'),
                 leading: Icon(
-                  Icons.dashboard,
+                  Icons.shopping_cart,
+                  color: Colors.lightGreen,
                 ),
               ),
             ),
@@ -133,6 +138,7 @@ class _HomePageState extends State<HomePage> {
                 title: Text('Favorites'),
                 leading: Icon(
                   Icons.favorite,
+                  color: Colors.lightGreen,
                 ),
               ),
             ),
@@ -145,7 +151,6 @@ class _HomePageState extends State<HomePage> {
                 title: Text('Settings'),
                 leading: Icon(
                   Icons.settings,
-                  color: Colors.blue,
                 ),
               ),
             ),
@@ -156,7 +161,6 @@ class _HomePageState extends State<HomePage> {
                 title: Text('About'),
                 leading: Icon(
                   Icons.help,
-                  color: Colors.orange,
                 ),
               ),
             ),
@@ -176,7 +180,12 @@ class _HomePageState extends State<HomePage> {
           const HorizontalList(),
 //           padding widget
           const Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.fromLTRB(
+              8,
+              20,
+              20,
+              20,
+            ),
             child: Text('Recent products'),
           ),
 
