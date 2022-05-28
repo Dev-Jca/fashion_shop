@@ -5,9 +5,12 @@ import 'package:fashion_shop/components/horizontal_list_view.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
+    MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const HomePage(),
+      routes: {
+        '/homePage/': (context) => const HomePage(),
+      },
     ),
   );
 }

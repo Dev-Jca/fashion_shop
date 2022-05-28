@@ -1,3 +1,4 @@
+import 'package:fashion_shop/pages/product_details.dart';
 import 'package:flutter/material.dart';
 
 class Products extends StatefulWidget {
@@ -12,6 +13,12 @@ class _ProductsState extends State<Products> {
     {
       'name': 'Blazer',
       'picture': 'assets/images/products/blazer1.jpeg',
+      'oldPrice': 120,
+      'price': 95,
+    },
+    {
+      'name': 'Skirts',
+      'picture': 'assets/images/products/skt1.jpeg',
       'oldPrice': 120,
       'price': 95,
     },
@@ -65,12 +72,6 @@ class _ProductsState extends State<Products> {
     },
     {
       'name': 'Skirts',
-      'picture': 'assets/images/products/skt1.jpeg',
-      'oldPrice': 120,
-      'price': 95,
-    },
-    {
-      'name': 'Skirts',
       'picture': 'assets/images/products/skt2.jpeg',
       'oldPrice': 120,
       'price': 95,
@@ -119,7 +120,18 @@ class SingleProduct extends StatelessWidget {
         tag: productName,
         child: Material(
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ProductDetails(
+                    productDetailsName: productName,
+                    productDetailsPrice: productPrice,
+                    productDetailsOldPrice: productOldPrice,
+                    productDetailsPicture: productPicture,
+                  ),
+                ),
+              );
+            },
             child: GridTile(
               footer: Container(
                 color: Colors.white70,
