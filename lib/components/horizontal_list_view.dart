@@ -24,7 +24,7 @@ class HorizontalList extends StatelessWidget {
           ),
           Category(
             imageLocation: 'assets/images/cats/accessories.png',
-            imageCaption: 'acessories',
+            imageCaption: 'accessories',
           ),
           Category(
             imageLocation: 'assets/images/cats/tshirt.png',
