@@ -42,7 +42,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           child: InkWell(
             onTap: () {
               Navigator.of(context)
-                  .pushNamedAndRemoveUntil('/homePage/', (route) => false);
+                  .pushNamedAndRemoveUntil('/app/', (route) => false);
             },
             child: const Text('Grande'),
           ),

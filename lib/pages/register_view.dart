@@ -44,7 +44,7 @@ class _RegisterViewState extends State<RegisterView> {
         ),
         title: const Padding(
           padding: EdgeInsets.fromLTRB(85, 0, 0, 0),
-          child: Text('Grande'),
+          child: Text('Register'),
         ),
       ),
       body: Column(
@@ -76,16 +76,29 @@ class _RegisterViewState extends State<RegisterView> {
                   onPressed: () async {
                     final email = _email.text;
                     final password = _password.text;
-                    await Firebase.initializeApp(
-                      options: DefaultFirebaseOptions.currentPlatform,
-                    );
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                      email: email,
-                      password: password,
-                    );
-                    final userCredential = FirebaseAuth.instance.currentUser;
-
-                    print(userCredential);
+                    try {
+                      await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                        email: email,
+                        password: password,
+                      );
+                      final user = FirebaseAuth.instance.currentUser;
+                      user?.sendEmailVerification();
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/login/',
+                        (route) => false,
+                      );
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'weak-password') {
+                        print('weak password');
+                      } else if (e.code == 'email-already-in-use') {
+                        print('email already in use');
+                      } else if (e.code == 'invalid-email') {
+                        print('invalid email');
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                   child: const Text(
                     'Register',
@@ -97,7 +110,19 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ),
             ],
-          )
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/login/', (route) => false);
+            },
+            child: const Text(
+              'Already registered? Login here',
+              style: TextStyle(
+                color: Colors.lightGreen,
+              ),
+            ),
+          ),
         ],
       ),
     );
