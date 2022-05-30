@@ -1,5 +1,6 @@
 import 'package:fashion_shop/components/product.dart';
 import 'package:fashion_shop/pages/app_view.dart';
+import 'package:fashion_shop/pages/cart_view.dart';
 import 'package:fashion_shop/pages/login_view.dart';
 import 'package:fashion_shop/pages/register_view.dart';
 import 'package:fashion_shop/pages/verify_email_view.dart';
@@ -23,6 +24,7 @@ void main() {
         '/verifyEmail/': (context) => const VerifyEmailView(),
         '/login/': (context) => const LoginView(),
         '/register/': (context) => const RegisterView(),
+        '/cart/': (context) => const CartView(),
       },
     ),
   );
@@ -34,25 +36,26 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ),
-        builder: ((context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              final user = FirebaseAuth.instance.currentUser;
-              if (user != null) {
-                if (user.emailVerified) {
-                  return const AppView();
-                } else {
-                  return const VerifyEmailView();
-                }
+      future: Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      ),
+      builder: ((context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            final user = FirebaseAuth.instance.currentUser;
+            if (user != null) {
+              if (user.emailVerified) {
+                return const AppView();
               } else {
-                return const LoginView();
+                return const VerifyEmailView();
               }
-            default:
-              return const CircularProgressIndicator();
-          }
-        }));
+            } else {
+              return const LoginView();
+            }
+          default:
+            return const CircularProgressIndicator();
+        }
+      }),
+    );
   }
 }

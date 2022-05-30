@@ -1,6 +1,7 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:fashion_shop/components/horizontal_list_view.dart';
 import 'package:fashion_shop/components/product.dart';
+import 'package:fashion_shop/pages/cart_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,10 @@ class _AppViewState extends State<AppView> {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => const CartView())));
+            },
             icon: const Icon(
               Icons.shopping_cart,
               color: Colors.white,
@@ -134,7 +138,12 @@ class _AppViewState extends State<AppView> {
             ),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => const CartView())));
+              },
               child: const ListTile(
                 title: Text('Shopping Cart'),
                 leading: Icon(
@@ -179,32 +188,37 @@ class _AppViewState extends State<AppView> {
           ],
         ),
       ),
-      body: ListView(
+      body: Column(
         children: [
 //         image carousel
           imageCarousel,
 //           padding widget
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('Categories'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              child: const Text('Categories'),
+            ),
           ),
 //          Horizontal list view
           const HorizontalList(),
 //           padding widget
-          const Padding(
-            padding: EdgeInsets.fromLTRB(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
               8,
               20,
               20,
               20,
             ),
-            child: Text('Recent products'),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              child: const Text('Recent products'),
+            ),
           ),
 
 //        grid view
-          Container(
-            height: 320.0,
-            child: const Products(),
+          const Flexible(
+            child: Products(),
           )
         ],
       ),
