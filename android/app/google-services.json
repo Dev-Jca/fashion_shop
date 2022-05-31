@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "989884033884-cp2qa8e0dce4og4gjgfo61stlbso7etj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "u42web.io.jcaproject2techshop.fashion_shop",
+            "certificate_hash": "750d19e885dbbf0fcaff14727eb53f96f54b8251"
+          }
+        },
+        {
           "client_id": "989884033884-2j5q2h8hkpkldqkc8sikjt4als4k06k2.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -93,7 +93,9 @@ class SingleCartProduct extends StatelessWidget {
           cartProductPicture,
         ),
 //=================this section is for the product name=================
-        title: Text(cartProductName),
+        title: Text(
+          cartProductName,
+        ),
         subtitle: Column(
           children: [
             Row(
@@ -118,7 +120,7 @@ class SingleCartProduct extends StatelessWidget {
                   child: Text('Color:'),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(2.0),
                   child: Text(
                     cartProductColor,
                     style: const TextStyle(
@@ -141,6 +143,7 @@ class SingleCartProduct extends StatelessWidget {
           ],
         ),
         trailing: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: IconButton(
@@ -148,7 +151,15 @@ class SingleCartProduct extends StatelessWidget {
                 icon: const Icon(Icons.arrow_drop_up),
               ),
             ),
-            Text('$cartProductQuantity'),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+              child: Text(
+                '$cartProductQuantity',
+                style: const TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ),
             Expanded(
               child: IconButton(
                 onPressed: () {},
