@@ -120,7 +120,7 @@ class SingleProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Hero(
-        tag: productName,
+        tag: const Text('praise'),
         child: Material(
           child: InkWell(
             onTap: () {

@@ -2,10 +2,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:fashion_shop/components/horizontal_list_view.dart';
 import 'package:fashion_shop/components/product.dart';
 import 'package:fashion_shop/pages/cart_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-enum MenuAction { logout }
 
 class AppView extends StatefulWidget {
   const AppView({Key? key}) : super(key: key);
@@ -60,27 +57,6 @@ class _AppViewState extends State<AppView> {
               color: Colors.white,
             ),
           ),
-          PopupMenuButton<MenuAction>(
-            onSelected: (value) async {
-              switch (value) {
-                case MenuAction.logout:
-                  final shouldLogout = await showLogOutDialog(context);
-                  if (shouldLogout) {
-                    await FirebaseAuth.instance.signOut;
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/login/', (_) => false);
-                  }
-              }
-            },
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem<MenuAction>(
-                  value: MenuAction.logout,
-                  child: Text('Log out'),
-                )
-              ];
-            },
-          )
         ],
       ),
       drawer: Drawer(
@@ -224,32 +200,4 @@ class _AppViewState extends State<AppView> {
       ),
     );
   }
-}
-
-Future<bool> showLogOutDialog(BuildContext context) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Log out'),
-        content: const Text('Are you sure you want to log out?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: const Text(
-              'Logout',
-            ),
-          )
-        ],
-      );
-    },
-  ).then((value) => value ?? false);
 }
