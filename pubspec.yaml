@@ -63,6 +63,9 @@ flutter:
     - assets/images/w1.jpeg
     - assets/images/w3.jpeg
     - assets/images/w4.jpeg
+    - assets/images/background.jpg
+    - assets/images/logo.png
+    - assets/images/google.png
     - assets/images/cats/accessories.png
     - assets/images/cats/dress.png
     - assets/images/cats/formal.png

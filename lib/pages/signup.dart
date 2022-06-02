@@ -1,63 +1,24 @@
-import 'package:fashion_shop/pages/app_view.dart';
-import 'package:fashion_shop/pages/signup.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:fashion_shop/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
-  late SharedPreferences preferences;
-  bool isLoggedIn = false;
-  bool loading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // isSignedIn();
-  }
-
-  void isSignedIn() async {
-    setState(() {
-      loading = true;
-    });
-
-    if (isLoggedIn == true) {
-      Future.delayed(Duration.zero).then((_) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: ((context) => const AppView())));
-      });
-
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
-  // Future handleSignIn() async {
-  //   preferences = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     loading = true;
-  //   });
-
-  // }
-
-  void signOutGoogle() async {
-    // await googleSignIn.signOut();
-  }
+  final TextEditingController _confirmPasswordTextController =
+      TextEditingController();
+  final TextEditingController _nameTextController = TextEditingController();
+  late String gender;
+  // bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +53,37 @@ class _LoginState extends State<Login> {
                   key: _formKey,
                   child: ListView(
                     children: [
+                      //===========================NAME INPUT =================================
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white.withOpacity(0.6),
+                          elevation: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                hintText: 'Full Name',
+                                icon: Icon(Icons.person_outline),
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              controller: _nameTextController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'The name field cannot be empty';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
                       //===========================EMAIL INPUT=================================
                       Padding(
                         padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
@@ -156,6 +148,40 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
+                      //===========================CONFIRMPASSWORD INPUT =================================
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white.withOpacity(0.6),
+                          elevation: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                hintText: 'Confirm password',
+                                icon: Icon(Icons.lock_outline),
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              controller: _confirmPasswordTextController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'The password field cannot be empty';
+                                } else if (value.length < 6) {
+                                  return 'The password has to be atleast 6 characters';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+
                       //===========================LOGIN BUTTON=================================
                       Padding(
                         padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
@@ -167,11 +193,9 @@ class _LoginState extends State<Login> {
                             padding: const EdgeInsets.only(left: 12.0),
                             child: MaterialButton(
                               minWidth: MediaQuery.of(context).size.width,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                              onPressed: () {},
                               child: const Text(
-                                'Login',
+                                'Signup',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white,
@@ -183,25 +207,14 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
-                      // =================FORGOT PASSWORD========================================
-                      const Divider(),
-                      const Center(
-                        child: Text(
-                          'Forgot password?',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ),
-                      const Divider(),
+
                       //====================DONT HAVE ACCOUNT SIGN UP==============================
                       Padding(
                         padding: const EdgeInsets.fromLTRB(30, 8, 30, 8),
                         child: Row(
                           children: [
                             const Text(
-                              "Don't have an account? click here to",
+                              "Have an account already? click here to",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w400,
@@ -213,10 +226,10 @@ class _LoginState extends State<Login> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const SignUp()));
+                                        builder: (context) => const Login()));
                               },
                               child: const Text(
-                                " " "Sign up",
+                                " " "Login",
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -233,18 +246,17 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-          Visibility(
-            visible: loading,
-            child: Center(
-              child: Container(
-                alignment: Alignment.center,
-                color: Colors.white.withOpacity(0.9),
-                child: const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                ),
-              ),
-            ),
-          ),
+          // Visibility(
+          //   child: Center(
+          //     child: Container(
+          //       alignment: Alignment.center,
+          //       color: Colors.white.withOpacity(0.9),
+          //       child: const CircularProgressIndicator(
+          //         valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
