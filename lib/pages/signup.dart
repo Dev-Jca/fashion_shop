@@ -18,11 +18,14 @@ class _SignUpState extends State<SignUp> {
       TextEditingController();
   final TextEditingController _nameTextController = TextEditingController();
   late String gender;
-  // bool loading = false;
+  String groupValue = 'male';
+  bool hidePass = true;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.1),
       body: Stack(
         children: [
           Image.asset(
@@ -67,10 +70,6 @@ class _SignUpState extends State<SignUp> {
                                 hintText: 'Full Name',
                                 icon: Icon(Icons.person_outline),
                                 border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
                               ),
                               keyboardType: TextInputType.emailAddress,
                               controller: _nameTextController,
@@ -83,6 +82,47 @@ class _SignUpState extends State<SignUp> {
                             ),
                           ),
                         ),
+                      ),
+//=========================GENDER SELECTION============================================
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                'male',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    color: Colors.white.withOpacity(0.7)),
+                              ),
+                              trailing: Radio(
+                                fillColor: MaterialStateColor.resolveWith(
+                                  (states) => Colors.white.withOpacity(0.7),
+                                ),
+                                value: 'male',
+                                groupValue: groupValue,
+                                onChanged: (e) => valueChanged(e),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                'female',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    color: Colors.white.withOpacity(0.7)),
+                              ),
+                              trailing: Radio(
+                                fillColor: MaterialStateColor.resolveWith(
+                                  (states) => Colors.white.withOpacity(0.7),
+                                ),
+                                value: 'female',
+                                groupValue: groupValue,
+                                onChanged: (e) => valueChanged(e),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       //===========================EMAIL INPUT=================================
                       Padding(
@@ -98,10 +138,6 @@ class _SignUpState extends State<SignUp> {
                                 hintText: 'Email',
                                 icon: Icon(Icons.alternate_email_outlined),
                                 border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
                               ),
                               keyboardType: TextInputType.emailAddress,
                               controller: _emailTextController,
@@ -129,13 +165,11 @@ class _SignUpState extends State<SignUp> {
                                 hintText: 'Password',
                                 icon: Icon(Icons.lock_outline),
                                 border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
                               ),
                               keyboardType: TextInputType.emailAddress,
                               controller: _passwordTextController,
+                              obscureText: hidePass,
+                              enableSuggestions: false,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'The password field cannot be empty';
@@ -162,18 +196,19 @@ class _SignUpState extends State<SignUp> {
                                 hintText: 'Confirm password',
                                 icon: Icon(Icons.lock_outline),
                                 border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
                               ),
                               keyboardType: TextInputType.emailAddress,
                               controller: _confirmPasswordTextController,
+                              obscureText: hidePass,
+                              enableSuggestions: false,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'The password field cannot be empty';
                                 } else if (value.length < 6) {
                                   return 'The password has to be atleast 6 characters';
+                                } else if (_passwordTextController.text !=
+                                    value) {
+                                  return 'the passwords do not match';
                                 }
                                 return null;
                               },
@@ -182,7 +217,7 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
 
-                      //===========================LOGIN BUTTON=================================
+                      //===========================SIGNUP BUTTON=================================
                       Padding(
                         padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
                         child: Material(
@@ -260,5 +295,17 @@ class _SignUpState extends State<SignUp> {
         ],
       ),
     );
+  }
+
+  valueChanged(e) {
+    setState(() {
+      if (e == 'male') {
+        groupValue = e;
+        gender = e;
+      } else if (e == 'female') {
+        groupValue = e;
+        gender = e;
+      }
+    });
   }
 }

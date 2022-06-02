@@ -22,6 +22,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordTextController = TextEditingController();
   late SharedPreferences preferences;
   bool isLoggedIn = false;
+  bool hidePass = true;
   bool loading = false;
 
   @override
@@ -62,6 +63,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.1),
       body: Stack(
         children: [
           Image.asset(
@@ -106,10 +108,6 @@ class _LoginState extends State<Login> {
                                 hintText: 'Email',
                                 icon: Icon(Icons.alternate_email_outlined),
                                 border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
                               ),
                               keyboardType: TextInputType.emailAddress,
                               controller: _emailTextController,
@@ -137,13 +135,11 @@ class _LoginState extends State<Login> {
                                 hintText: 'Password',
                                 icon: Icon(Icons.lock_outline),
                                 border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
                               ),
                               keyboardType: TextInputType.emailAddress,
                               controller: _passwordTextController,
+                              obscureText: hidePass,
+                              enableSuggestions: false,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'The password field cannot be empty';
