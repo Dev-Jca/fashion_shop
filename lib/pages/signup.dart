@@ -1,6 +1,11 @@
+import 'package:fashion_shop/firebase_options.dart';
+import 'package:fashion_shop/main.dart';
+import 'package:fashion_shop/pages/app_view.dart';
 import 'package:fashion_shop/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fashion_shop/db/users.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -12,6 +17,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
+  UserServices _userServices = UserServices();
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
   final TextEditingController _confirmPasswordTextController =
@@ -64,7 +70,8 @@ class _SignUpState extends State<SignUp> {
                           color: Colors.white.withOpacity(0.6),
                           elevation: 0,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
+                            padding:
+                                const EdgeInsets.fromLTRB(26, 4.5, 14, 4.5),
                             child: TextFormField(
                               decoration: const InputDecoration(
                                 hintText: 'Full Name',
@@ -88,13 +95,7 @@ class _SignUpState extends State<SignUp> {
                         children: [
                           Expanded(
                             child: ListTile(
-                              title: Text(
-                                'male',
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7)),
-                              ),
-                              trailing: Radio(
+                              title: Radio(
                                 fillColor: MaterialStateColor.resolveWith(
                                   (states) => Colors.white.withOpacity(0.7),
                                 ),
@@ -102,23 +103,35 @@ class _SignUpState extends State<SignUp> {
                                 groupValue: groupValue,
                                 onChanged: (e) => valueChanged(e),
                               ),
+                              trailing: Padding(
+                                padding: const EdgeInsets.only(right: 45.0),
+                                child: Text(
+                                  'male',
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.7)),
+                                ),
+                              ),
                             ),
                           ),
                           Expanded(
                             child: ListTile(
-                              title: Text(
-                                'female',
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7)),
-                              ),
-                              trailing: Radio(
+                              title: Radio(
                                 fillColor: MaterialStateColor.resolveWith(
                                   (states) => Colors.white.withOpacity(0.7),
                                 ),
                                 value: 'female',
                                 groupValue: groupValue,
                                 onChanged: (e) => valueChanged(e),
+                              ),
+                              trailing: Padding(
+                                padding: const EdgeInsets.only(right: 45.0),
+                                child: Text(
+                                  'female',
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.7)),
+                                ),
                               ),
                             ),
                           ),
@@ -132,7 +145,8 @@ class _SignUpState extends State<SignUp> {
                           color: Colors.white.withOpacity(0.6),
                           elevation: 0,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
+                            padding:
+                                const EdgeInsets.fromLTRB(26, 4.5, 14, 4.5),
                             child: TextFormField(
                               decoration: const InputDecoration(
                                 hintText: 'Email',
@@ -160,24 +174,38 @@ class _SignUpState extends State<SignUp> {
                           elevation: 0,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 12.0),
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                hintText: 'Password',
-                                icon: Icon(Icons.lock_outline),
-                                border: InputBorder.none,
+                            child: ListTile(
+                              title: TextFormField(
+                                decoration: const InputDecoration(
+                                  hintText: 'Password',
+                                  icon: Icon(Icons.lock_outline),
+                                  border: InputBorder.none,
+                                ),
+                                controller: _passwordTextController,
+                                obscureText: hidePass,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'The password field cannot be empty';
+                                  } else if (value.length < 6) {
+                                    return 'The password has to be atleast 6 characters';
+                                  }
+                                  return null;
+                                },
                               ),
-                              keyboardType: TextInputType.emailAddress,
-                              controller: _passwordTextController,
-                              obscureText: hidePass,
-                              enableSuggestions: false,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'The password field cannot be empty';
-                                } else if (value.length < 6) {
-                                  return 'The password has to be atleast 6 characters';
-                                }
-                                return null;
-                              },
+                              trailing: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    hidePass = !hidePass;
+                                  });
+                                },
+                                icon: Icon(
+                                  hidePass
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -191,27 +219,41 @@ class _SignUpState extends State<SignUp> {
                           elevation: 0,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 12.0),
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                hintText: 'Confirm password',
-                                icon: Icon(Icons.lock_outline),
-                                border: InputBorder.none,
+                            child: ListTile(
+                              title: TextFormField(
+                                decoration: const InputDecoration(
+                                  hintText: 'Confirm password',
+                                  icon: Icon(Icons.lock_outline),
+                                  border: InputBorder.none,
+                                ),
+                                controller: _confirmPasswordTextController,
+                                obscureText: hidePass,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'The password field cannot be empty';
+                                  } else if (value.length < 6) {
+                                    return 'The password has to be atleast 6 characters';
+                                  } else if (_passwordTextController.text !=
+                                      value) {
+                                    return 'the passwords do not match';
+                                  }
+                                  return null;
+                                },
                               ),
-                              keyboardType: TextInputType.emailAddress,
-                              controller: _confirmPasswordTextController,
-                              obscureText: hidePass,
-                              enableSuggestions: false,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'The password field cannot be empty';
-                                } else if (value.length < 6) {
-                                  return 'The password has to be atleast 6 characters';
-                                } else if (_passwordTextController.text !=
-                                    value) {
-                                  return 'the passwords do not match';
-                                }
-                                return null;
-                              },
+                              trailing: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    hidePass = !hidePass;
+                                  });
+                                },
+                                icon: Icon(
+                                  hidePass
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -228,7 +270,9 @@ class _SignUpState extends State<SignUp> {
                             padding: const EdgeInsets.only(left: 12.0),
                             child: MaterialButton(
                               minWidth: MediaQuery.of(context).size.width,
-                              onPressed: () {},
+                              onPressed: () async {
+                                validateForm();
+                              },
                               child: const Text(
                                 'Signup',
                                 textAlign: TextAlign.center,
@@ -307,5 +351,35 @@ class _SignUpState extends State<SignUp> {
         gender = e;
       }
     });
+  }
+
+  Future validateForm() async {
+    FormState? formState = _formKey.currentState;
+
+    if (formState!.validate()) {
+      formState.reset();
+      User? user = _auth.currentUser;
+      if (user != null) {
+        _auth
+            .createUserWithEmailAndPassword(
+              email: _emailTextController.text,
+              password: _passwordTextController.text,
+            )
+            .then((user) => {
+                  _userServices.createUser(
+                    {
+                      'username': _nameTextController.text,
+                      'email': _emailTextController.text,
+                      'userId': user.user?.uid,
+                      'gender': gender,
+                    },
+                  )
+                })
+            .catchError((e) => {print(e.toString())});
+
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const AppView()));
+      }
+    }
   }
 }

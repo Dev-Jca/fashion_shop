@@ -102,7 +102,8 @@ class _LoginState extends State<Login> {
                           color: Colors.white.withOpacity(0.6),
                           elevation: 0,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
+                            padding:
+                                const EdgeInsets.fromLTRB(26, 4.5, 14, 4.5),
                             child: TextFormField(
                               decoration: const InputDecoration(
                                 hintText: 'Email',
@@ -130,24 +131,38 @@ class _LoginState extends State<Login> {
                           elevation: 0,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 12.0),
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                hintText: 'Password',
-                                icon: Icon(Icons.lock_outline),
-                                border: InputBorder.none,
+                            child: ListTile(
+                              title: TextFormField(
+                                decoration: const InputDecoration(
+                                  hintText: 'Password',
+                                  icon: Icon(Icons.lock_outline),
+                                  border: InputBorder.none,
+                                ),
+                                controller: _passwordTextController,
+                                obscureText: hidePass,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'The password field cannot be empty';
+                                  } else if (value.length < 6) {
+                                    return 'The password has to be atleast 6 characters';
+                                  }
+                                  return null;
+                                },
                               ),
-                              keyboardType: TextInputType.emailAddress,
-                              controller: _passwordTextController,
-                              obscureText: hidePass,
-                              enableSuggestions: false,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'The password field cannot be empty';
-                                } else if (value.length < 6) {
-                                  return 'The password has to be atleast 6 characters';
-                                }
-                                return null;
-                              },
+                              trailing: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    hidePass = !hidePass;
+                                  });
+                                },
+                                icon: Icon(
+                                  hidePass
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                              ),
                             ),
                           ),
                         ),
