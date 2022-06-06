@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fashion_shop/firebase_options.dart';
 import 'package:fashion_shop/main.dart';
 import 'package:fashion_shop/pages/app_view.dart';
@@ -271,7 +272,28 @@ class _SignUpState extends State<SignUp> {
                             child: MaterialButton(
                               minWidth: MediaQuery.of(context).size.width,
                               onPressed: () async {
-                                validateForm();
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState?.reset();
+                                  User? user = _auth.currentUser;
+                                  if (user != null) {
+                                    await _auth
+                                        .createUserWithEmailAndPassword(
+                                          email: _emailTextController.text,
+                                          password:
+                                              _passwordTextController.text,
+                                        )
+                                        .then((value) => {
+                                              FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(value.user?.uid)
+                                                  .set({
+                                                "email": value.user?.email,
+                                                "userName":
+                                                    _nameTextController.text,
+                                              })
+                                            });
+                                  }
+                                }
                               },
                               child: const Text(
                                 'Signup',
@@ -351,35 +373,5 @@ class _SignUpState extends State<SignUp> {
         gender = e;
       }
     });
-  }
-
-  Future validateForm() async {
-    FormState? formState = _formKey.currentState;
-
-    if (formState!.validate()) {
-      formState.reset();
-      User? user = _auth.currentUser;
-      if (user != null) {
-        _auth
-            .createUserWithEmailAndPassword(
-              email: _emailTextController.text,
-              password: _passwordTextController.text,
-            )
-            .then((user) => {
-                  _userServices.createUser(
-                    {
-                      'username': _nameTextController.text,
-                      'email': _emailTextController.text,
-                      'userId': user.user?.uid,
-                      'gender': gender,
-                    },
-                  )
-                })
-            .catchError((e) => {print(e.toString())});
-
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const AppView()));
-      }
-    }
   }
 }
