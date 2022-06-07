@@ -119,61 +119,58 @@ class SingleProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Hero(
-        tag: const Text('j'),
-        child: Material(
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ProductDetails(
-                    productDetailsName: productName,
-                    productDetailsPrice: productPrice,
-                    productDetailsOldPrice: productOldPrice,
-                    productDetailsPicture: productPicture,
-                  ),
+      child: Material(
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ProductDetails(
+                  productDetailsName: productName,
+                  productDetailsPrice: productPrice,
+                  productDetailsOldPrice: productOldPrice,
+                  productDetailsPicture: productPicture,
                 ),
-              );
-            },
-            child: GridTile(
-              footer: Container(
-                color: Colors.white70,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        productName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      child: Text(
-                        '\$$productOldPrice',
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          decoration: TextDecoration.lineThrough,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '\$$productPrice',
+              ),
+            );
+          },
+          child: GridTile(
+            footer: Container(
+              color: Colors.white70,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      productName,
                       style: const TextStyle(
-                        color: Colors.red,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: Text(
+                      '\$$productOldPrice',
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        decoration: TextDecoration.lineThrough,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '\$$productPrice',
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
-              child: Image.asset(
-                productPicture,
-                fit: BoxFit.cover,
-              ),
+            ),
+            child: Image.asset(
+              productPicture,
+              fit: BoxFit.cover,
             ),
           ),
         ),

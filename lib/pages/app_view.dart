@@ -2,6 +2,8 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:fashion_shop/components/horizontal_list_view.dart';
 import 'package:fashion_shop/components/product.dart';
 import 'package:fashion_shop/pages/cart_view.dart';
+import 'package:fashion_shop/pages/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AppView extends StatefulWidget {
@@ -12,6 +14,7 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     Widget imageCarousel = Container(
@@ -158,6 +161,24 @@ class _AppViewState extends State<AppView> {
                 title: Text('About'),
                 leading: Icon(
                   Icons.help,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                User? user = _auth.currentUser;
+                await _auth.signOut();
+                if (user != null) {
+                  Future.delayed(Duration.zero).then((_) => {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const Login()))
+                      });
+                }
+              },
+              child: const ListTile(
+                title: Text('Logout'),
+                leading: Icon(
+                  Icons.logout,
                 ),
               ),
             ),

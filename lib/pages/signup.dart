@@ -24,7 +24,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _confirmPasswordTextController =
       TextEditingController();
   final TextEditingController _nameTextController = TextEditingController();
-  late String gender;
+  String? gender;
   String groupValue = 'male';
   bool hidePass = true;
   bool loading = false;
@@ -92,52 +92,52 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
 //=========================GENDER SELECTION============================================
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              title: Radio(
-                                fillColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.white.withOpacity(0.7),
-                                ),
-                                value: 'male',
-                                groupValue: groupValue,
-                                onChanged: (e) => valueChanged(e),
-                              ),
-                              trailing: Padding(
-                                padding: const EdgeInsets.only(right: 45.0),
-                                child: Text(
-                                  'male',
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(0.7)),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: ListTile(
-                              title: Radio(
-                                fillColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.white.withOpacity(0.7),
-                                ),
-                                value: 'female',
-                                groupValue: groupValue,
-                                onChanged: (e) => valueChanged(e),
-                              ),
-                              trailing: Padding(
-                                padding: const EdgeInsets.only(right: 45.0),
-                                child: Text(
-                                  'female',
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(0.7)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child: ListTile(
+                      //         title: Radio(
+                      //           fillColor: MaterialStateColor.resolveWith(
+                      //             (states) => Colors.white.withOpacity(0.7),
+                      //           ),
+                      //           value: 'male',
+                      //           groupValue: groupValue,
+                      //           onChanged: (e) => valueChanged(e),
+                      //         ),
+                      //         trailing: Padding(
+                      //           padding: const EdgeInsets.only(right: 45.0),
+                      //           child: Text(
+                      //             'male',
+                      //             textAlign: TextAlign.end,
+                      //             style: TextStyle(
+                      //                 color: Colors.white.withOpacity(0.7)),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Expanded(
+                      //       child: ListTile(
+                      //         title: Radio(
+                      //           fillColor: MaterialStateColor.resolveWith(
+                      //             (states) => Colors.white.withOpacity(0.7),
+                      //           ),
+                      //           value: 'female',
+                      //           groupValue: groupValue,
+                      //           onChanged: (e) => valueChanged(e),
+                      //         ),
+                      //         trailing: Padding(
+                      //           padding: const EdgeInsets.only(right: 45.0),
+                      //           child: Text(
+                      //             'female',
+                      //             textAlign: TextAlign.end,
+                      //             style: TextStyle(
+                      //                 color: Colors.white.withOpacity(0.7)),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       //===========================EMAIL INPUT=================================
                       Padding(
                         padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
@@ -274,24 +274,30 @@ class _SignUpState extends State<SignUp> {
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState?.reset();
+
+                                  await _auth
+                                      .createUserWithEmailAndPassword(
+                                        email: _emailTextController.text,
+                                        password: _passwordTextController.text,
+                                      )
+                                      .then((value) => {
+                                            FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(value.user?.uid)
+                                                .set({
+                                              "email": value.user?.email,
+                                              "userName":
+                                                  _nameTextController.text,
+                                            })
+                                          });
                                   User? user = _auth.currentUser;
                                   if (user != null) {
-                                    await _auth
-                                        .createUserWithEmailAndPassword(
-                                          email: _emailTextController.text,
-                                          password:
-                                              _passwordTextController.text,
-                                        )
-                                        .then((value) => {
-                                              FirebaseFirestore.instance
-                                                  .collection('users')
-                                                  .doc(value.user?.uid)
-                                                  .set({
-                                                "email": value.user?.email,
-                                                "userName":
-                                                    _nameTextController.text,
-                                              })
-                                            });
+                                    Future.delayed(Duration.zero).then((_) => {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Login()))
+                                        });
                                   }
                                 }
                               },

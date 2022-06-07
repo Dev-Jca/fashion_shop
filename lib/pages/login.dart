@@ -25,28 +25,29 @@ class _LoginState extends State<Login> {
   bool hidePass = true;
   bool loading = false;
 
-  @override
-  void initState() {
-    super.initState();
-    // isSignedIn();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // isSignedIn();
+  // }
 
-  void isSignedIn() async {
-    setState(() {
-      loading = true;
-    });
+  // void isSignedIn() async {
+  //   setState(() {
+  //     loading = true;
+  //   });
 
-    if (isLoggedIn == true) {
-      Future.delayed(Duration.zero).then((_) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: ((context) => const AppView())));
-      });
+  //   _auth.currentUser;
+  //   if (isLoggedIn == true) {
+  //     Future.delayed(Duration.zero).then((_) {
+  //       Navigator.pushReplacement(context,
+  //           MaterialPageRoute(builder: ((context) => const AppView())));
+  //     });
 
-      setState(() {
-        loading = false;
-      });
-    }
-  }
+  //     setState(() {
+  //       loading = false;
+  //     });
+  //   }
+  // }
 
   // Future handleSignIn() async {
   //   preferences = await SharedPreferences.getInstance();
@@ -178,8 +179,20 @@ class _LoginState extends State<Login> {
                             padding: const EdgeInsets.only(left: 12.0),
                             child: MaterialButton(
                               minWidth: MediaQuery.of(context).size.width,
-                              onPressed: () {
-                                Navigator.pop(context);
+                              onPressed: () async {
+                                await _auth.signInWithEmailAndPassword(
+                                  email: _emailTextController.text,
+                                  password: _passwordTextController.text,
+                                );
+                                User? user = _auth.currentUser;
+                                if (user != null) {
+                                  Future.delayed(Duration.zero).then((_) => {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const AppView()))
+                                      });
+                                }
                               },
                               child: const Text(
                                 'Login',
